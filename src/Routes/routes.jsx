@@ -19,6 +19,8 @@ import ManageItem from '../pages/Dashboard/ManageItems/ManageItem';
 import Payment from '../pages/Dashboard/Payment/Payment';
 import UserHome from '../pages/Dashboard/UserHome/UserHome'
 import AdminHome from '../pages/Dashboard/AdminHome/AdminHome';
+import Reaservations from '../pages/Dashboard/Reservations/Reaservations';
+import PostReview from '../pages/Dashboard/PostReview/PostReview';
 
 export const router = createBrowserRouter([
   {
@@ -66,6 +68,14 @@ export const router = createBrowserRouter([
       {
         path: 'payment',
         element: <Payment></Payment>
+      },
+      {
+        path: 'reservations',
+        element: <Reaservations></Reaservations>
+      },
+      {
+        path: 'postreview',
+        element: <PostReview></PostReview>
       },
       {
         path: 'adminhome',
