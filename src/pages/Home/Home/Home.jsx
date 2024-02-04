@@ -8,6 +8,7 @@ import Featured from "../Featured/Featured";
 import PopulerMenu from "../PopularMenu/PopulerMenu";
 import Testimonials from "../Testimonials/Testimonials";
 
+
 const Home = () => {
     return (
         <div>

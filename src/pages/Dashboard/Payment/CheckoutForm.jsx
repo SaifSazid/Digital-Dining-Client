@@ -1,19 +1,22 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useEffect, useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+
 import useAuth from "../../../hooks/useAuth";
 import './CheckoutForm.css'
 
 
-const CheckoutForm = ({ price }) => {
+const CheckoutForm = ({ price, cart }) => {
     const stripe = useStripe();
     const elements = useElements();
     const { user } = useAuth();
+
     const [axiosSecure] = useAxiosSecure()
     const [cardError, setCardError] = useState('');
     const [clientSecret, setClientSecret] = useState('');
     const [processing, setProcessing] = useState(false);
     const [transactionId, setTransactionId] = useState('');
+
 
     useEffect(() => {
 
@@ -76,14 +79,18 @@ const CheckoutForm = ({ price }) => {
                 email: user?.email,
                 transactionId: paymentIntent.id,
                 price,
-
+                date: new Date(),
+                quantity: cart.length,
+                cartItems: cart.map(item => item._id),
+                menuItems: cart.map(item => item.menuItemId),
+                itemName: cart.map(item => item.name),
                 status: 'service pending'
 
             }
             axiosSecure.post('/payments', payment)
                 .then(res => {
                     console.log(res.data);
-                    if (res.data.insertedId) {
+                    if (res.data.result.insertedId) {
 
                     }
                 })
@@ -108,7 +115,7 @@ const CheckoutForm = ({ price }) => {
                         },
                     }}
                 />
-                <button className="btn btn-outline btn-primary btn-sm mt-4" type="submit" disabled={!stripe || !clientSecret || processing}>
+                <button className="btn btn-outline btn-primary btn-sm mt-4" type="submit" disabled={!stripe  || processing}>
                     Pay
                 </button>
             </form>

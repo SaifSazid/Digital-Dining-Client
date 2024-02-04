@@ -1,72 +1,176 @@
-import { useContext, useEffect } from "react";
+// import { FaShoppingCart } from "react-icons/fa";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../../../providers/AuthProvider";
-import { FaShoppingCart } from "react-icons/fa";
-import useCart from "../../../hooks/useCart";
 import useAdmin from "../../../hooks/useAdmin";
+import useCart from "../../../hooks/useCart";
+import { AuthContext } from "../../../providers/AuthProvider";
+import "./Navbar.css";
+import { TiShoppingCart } from "react-icons/ti";
+
+// import { CiShoppingCart } from "react-icons/ci";
+// import { FaUser } from "react-icons/fa6";
 
 const Navbar = () => {
     const { user, logOut } = useContext(AuthContext);
     const [cart] = useCart();
-    const [isAdmin] = useAdmin()
+    const [isAdmin] = useAdmin();
 
-    const handleLogout = () => {
+    // nav hamburger button work
+    const [themeMenuOpened, setThemeMenuOpened] = useState(false);
+    const themeMenu = useRef(null);
+    const themeMenuButton = useRef(null);
+    useEffect(() => {
+        if (!themeMenuOpened) {
+            document.activeElement.blur();
+        } else if (
+            themeMenuOpened &&
+            !themeMenu.current.contains(document.activeElement)
+        ) {
+            setThemeMenuOpened(false);
+        }
+    }, [themeMenuOpened]);
+
+    const handleLogOut = () => {
         logOut()
             .then(() => { })
-            .catch(error => console.log(error));
-    }
+            .catch((err) => console.error(err));
+    };
 
-   
-    const navOptions = <>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/menu">Menu</Link></li>
-        <li><Link to="/order/salad">Order Food</Link></li>
-        {
-            isAdmin ? <li><Link to='/dashboard/adminhome'>Dashboard</Link></li> :
-            <li><Link to='/dashboard/userhome'>Dashboard</Link></li>
-        }
-        <li>
-            <Link to='/dashboard/mycart'>
-                <button className="btn">
-                    <FaShoppingCart />
-                    <div className="badge badge-secondary">+{cart?.length || 0}</div>
-                </button>
-            </Link>
-        </li>
+    const navOptions = (
+        <>
+            <li>
+                <Link to="/">Home</Link>
+            </li>
+            <li>
+                <Link to="/menu">Menu</Link>
+            </li>
+            <li>
+                <Link to="/order/salad">Order</Link>
+            </li>
 
-        <li><Link to="/signup">Signup</Link></li>
-        {
-            user ? <>
-                {/* <span>{user?.displayName}</span> */}
-                <Link><button onClick={handleLogout} className="btn btn-ghost">Logout</button></Link>
-            </> : <>
-                <li><Link  to="/login">Login</Link></li>
-            </>
-        }
-
-
-    </>
+            {user ? (
+                <>
+                    <li>
+                        <Link to={isAdmin ? "dashboard/adminhome" : "dashboard/userhome"}>
+                            Dashboard
+                        </Link>
+                    </li>
+                    <span className="ml-2 mt-3 text-yellow-200">{user.displayName}</span>
+                    <span className="ml-2 mt-2 mr-2">
+                        {user.photoURL ? (
+                            <img
+                                className="rounded-full h-7 w-6"
+                                src={user.photoURL}
+                                alt="user"
+                            />
+                        ) : (
+                            <p>{user.displayName}</p>
+                            
+                        )}
+                    </span>
+                    {!isAdmin ?(<> <li className="btn-handle">
+                        <Link to="/dashboard/mycart">
+                            <button className="btn-sm text-xl">
+                                <div className="flex">
+                                    <TiShoppingCart></TiShoppingCart>
+                                    <span className="badge badge-secondary ml-3">
+                                        {cart?.length || 0}
+                                    </span>
+                                </div>
+                            </button>
+                        </Link>
+                    </li>
+                    </>):
+                    (<>
+                    </>)}
+                    
+                    <li className="btn-handle">
+                        <Link to="">
+                            <button onClick={handleLogOut} className="btn-sm uppercase">
+                                Logout
+                            </button>
+                        </Link>
+                    </li>
+                    <li></li>
+                </>
+            ) : (
+                <>
+                    <li>
+                        <Link to="/login">Login</Link>
+                    </li>
+                    <li>
+                        <Link to="/signup">Sign Up</Link>
+                    </li>
+                </>
+            )}
+        </>
+    );
 
     return (
         <>
-            <div className="navbar fixed z-10 max-w-screen-xl bg-opacity-30 bg-black text-white">
+            <div className="navbar fixed z-10 bg-opacity-30 max-w-screen-xl bg-black text-white ">
                 <div className="navbar-start">
-                    <div className="dropdown">
-                        <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
-                        </div>
-                        <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+                    <div className="dropdown uppercase" ref={themeMenu}>
+                        <label
+                            tabIndex={0}
+                            className="btn btn-ghost lg:hidden "
+                            // ref={themeMenuButton}
+                            onBlur={(e) => {
+                                setThemeMenuOpened(false);
+                            }}
+                            onClick={(e) => {
+                                if (themeMenuOpened) {
+                                    setThemeMenuOpened(false);
+                                } else {
+                                    setThemeMenuOpened(true);
+                                }
+                            }}
+                        >
+                            {!themeMenuOpened ? (
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="#f7f9fd"
+                                    height="1em"
+                                    viewBox="0 0 448 512"
+                                >
+                                    <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
+                                </svg>
+                            ) : (
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="#f0f2f5"
+                                    height="1em"
+                                    viewBox="0 0 384 512"
+                                >
+                                    <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+                                </svg>
+                            )}
+                        </label>
+                        <ul
+                            tabIndex={0}
+                            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-red-800 text-xl text-white rounded-box w-52"
+                            onBlur={(e) => {
+                                themeMenuButton.current.focus();
+                            }}
+                            onFocus={(e) => {
+                                setThemeMenuOpened(true);
+                            }}
+                        >
                             {navOptions}
                         </ul>
                     </div>
-                    <Link className="btn btn-ghost text-xl" to='/'> Digital Dining</Link>
+                    <Link to="/">
+                        <button className="btn btn-ghost normal-case text-xl">
+                            Digital Dining
+                        </button>
+                    </Link>
                 </div>
-                <div className="navbar-center hidden lg:flex">
-                    <ul className="menu menu-horizontal px-1">
+                <div className="navbar-center  hidden lg:flex">
+                    <ul className="menu menu-horizontal pl-44 pr-44 uppercase">
                         {navOptions}
                     </ul>
                 </div>
-                            </div>
+            </div>
         </>
     );
 };

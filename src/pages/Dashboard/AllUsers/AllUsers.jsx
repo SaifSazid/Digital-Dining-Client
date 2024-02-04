@@ -11,7 +11,9 @@ const AllUsers = () => {
         queryKey: ['users'],
         queryFn: async () => {
             const response = await axiosSecure.get(`/users`)
+            console.log(response.data)
             return response.data;
+            
         }
     })
 

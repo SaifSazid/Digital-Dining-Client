@@ -48,7 +48,7 @@ const MyCart = () => {
             <div className='uppercase font-semibold h-[60px] items-center flex justify-evenly'>
                 <h3 className='text-3xl'>Total items: {cart.length}</h3>
                 <h3 className='text-3xl'>Total price: ${total}</h3>
-                <Link to="/dashboard/payment"><button  className="btn btn-outline btn-warning btn-sm">PAY</button></Link>
+                <Link to="/dashboard/proceedtocheckout"><button  className="btn btn-outline btn-warning btn-sm" disabled={!cart.length}>Proceed to Checkout</button></Link>
             </div>
 
             <div className="overflow-x-auto">

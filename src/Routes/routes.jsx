@@ -21,6 +21,7 @@ import UserHome from '../pages/Dashboard/UserHome/UserHome'
 import AdminHome from '../pages/Dashboard/AdminHome/AdminHome';
 import Reaservations from '../pages/Dashboard/Reservations/Reaservations';
 import PostReview from '../pages/Dashboard/PostReview/PostReview';
+import ProceedToCheckout from '../pages/Dashboard/ProceedToCheckout/ProceedToCheckout';
 
 export const router = createBrowserRouter([
   {
@@ -76,6 +77,10 @@ export const router = createBrowserRouter([
       {
         path: 'postreview',
         element: <PostReview></PostReview>
+      },
+      {
+        path: 'proceedtocheckout',
+        element: <ProceedToCheckout></ProceedToCheckout>
       },
       {
         path: 'adminhome',
