@@ -10,7 +10,7 @@ const useAxiosSecure = () => {
 
 
     const axiosSecure = axios.create({
-        baseURL: 'https://digital-dining-server.vercel.app/',
+        baseURL: 'https://dgitial-dining-server.onrender.com/',
     });
 
     useEffect(() => {
