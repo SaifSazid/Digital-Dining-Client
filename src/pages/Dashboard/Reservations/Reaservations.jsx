@@ -83,7 +83,7 @@ const Reaservations = () => {
                     <input className="file-input file-input-bordered w-1/3" type="date" placeholder="Date" {...register("date", {})} />
                 </label>
 
-                <input className='btn btn-sm mt-4' type="submit" value="Book Now" />
+                <input className='btn btn-sm btn-warning mt-4 mb-4' type="submit" value="Book Now" />
 
             </form>
         </div>
