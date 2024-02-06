@@ -17,7 +17,7 @@ const SocialLogin = () => {
                 console.log(loggedInUser);
                 const savedUser = {name: loggedInUser.displayName, email: loggedInUser.email}
                 navigate('/');
-                fetch('http://localhost:5000/users', {
+                fetch('https://dgitial-dining-server.onrender.com/users', {
                     method: 'POST',
                     headers: {
                         'content-type': 'application/json'
