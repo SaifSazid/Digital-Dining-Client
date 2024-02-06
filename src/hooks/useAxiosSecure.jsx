@@ -10,7 +10,7 @@ const useAxiosSecure = () => {
 
 
     const axiosSecure = axios.create({
-        baseURL: 'http://localhost:5000',
+        baseURL: 'https://digital-dining-server.vercel.app/',
     });
 
     useEffect(() => {
